@@ -52,7 +52,7 @@ Bricht etwas ab, kommt eine Push-Nachricht aufs Handy.
 | 03 | Wine-Spike: Läuft der Sync.com-Windows-Client headless unter Wine/Xvfb? Wie erkennt man den Upload-Abschluss? Wie gibt man lokal Platz frei, ohne in der Cloud zu löschen? Wie geht er mit Dateinamen um? | human | pending (wartet auf sudo-Installation durch Dennis) |
 | 04 | `SyncTarget` für Wine-Client oder Web-Panel umsetzen, je nach Ergebnis von 03. Dazu der Webpanel-Verifier für Stufe 2. | skip | pending |
 | 05 | Betrieb: Pufferplatte (ext4, Marker), systemd-User-Dienst, Healthchecks, Testlauf mit kleinem Ordner, Produktivstart | human | pending |
-| 06 | Open-Source-Veröffentlichung als **skyferry** (MIT): Umbenennung, persönliche Daten entfernt, englische Doku, CI (tests, gitleaks), Push-Schutz, Ruleset, Pre-Commit-Hook, öffentliches Repo `cubetribe/skyferry` | skip | in-progress |
+| 06 | Open-Source-Veröffentlichung als **skyferry** (MIT): Umbenennung, persönliche Daten entfernt, englische Doku, CI (tests, gitleaks), Push-Schutz, Ruleset, Pre-Commit-Hook, öffentliches Repo `cubetribe/skyferry` | skip | **done** |
 
 ## Nicht-Ziele
 
@@ -75,6 +75,13 @@ Bricht etwas ab, kommt eine Push-Nachricht aufs Handy.
   - Die Doku schreibt @scribe.
   - `.github/workflows/` ist eine Sicherheitsfläche, deshalb prüft @ci-security-guardian vor dem Push.
   - Der unveröffentlichte erste Commit wird vor dem Push neu geschrieben, um eine persönliche E-Mail-Adresse aus der Historie zu entfernen.
+  - Ergebnis: veröffentlicht als <https://github.com/cubetribe/skyferry>, MIT.
+    - Die Historie besteht aus einem sauberen Commit. gitleaks und eine Suche nach persönlichen Daten über die ganze Historie fanden nichts.
+    - Die CI-Läufe secret-scan (5/5 Canaries erkannt, Negativkontrolle sauber, keine Leaks) und tests (48/48) waren beim ersten Push grün.
+    - Ruleset `protect-main` ist aktiv: deletion, non_fast_forward, Pflicht-Checks `gitleaks` und `unittest`, Admin-Bypass.
+    - Secret Scanning und Push Protection sind an, ebenso Private Vulnerability Reporting und die Freigabepflicht für Fork-PRs externer Beitragender.
+    - Einstiegs-Issues: #1 (Sync.com-Ziel, help wanted) und #2 (englische Oberfläche, good first issue).
+    - Review-Bericht: `reports/v0.1.0/sprint-06/03-ci-security-guardian-report.md`.
 
 - @architect übersprungen: Inline-Brief oben genügt. Das Projekt ist neu und klein, ein einzelner Bereich.
 - @api-guardian übersprungen: keine öffentliche API und keine Typverträge zu Konsumenten.
