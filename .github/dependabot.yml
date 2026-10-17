@@ -1,0 +1,16 @@
+# Keeps the SHA-pinned GitHub Actions current.
+# NOTE: gitleaks (secret-scan.yml) and rclone (tests.yml) are pinned by version
+# and SHA256 in env vars; Dependabot cannot see those - bump them by hand.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci"

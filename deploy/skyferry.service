@@ -1,0 +1,16 @@
+[Unit]
+Description=skyferry - Google Drive nach Sync.com Migration
+OnFailure=skyferry-notify-failure@%n.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/skyferry
+Environment=PATH=%h/.local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 -m skyferry run
+Restart=on-failure
+RestartSec=300
+Nice=10
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,37 @@
+# gitleaks configuration for skyferry.
+# Default rules plus the secrets this project actually handles. Everything here
+# must only ever live on the server in ~/.config/... (mode 0600), never in git.
+title = "skyferry"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "healthchecks-ping-url"
+description = "healthchecks.io ping URL (UUID form) - anyone holding it can fake or silence heartbeats"
+regex = '''hc-ping\.com/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'''
+keywords = ["hc-ping.com"]
+
+[[rules]]
+id = "healthchecks-ping-key-url"
+description = "healthchecks.io ping URL (ping-key/slug form)"
+regex = '''hc-ping\.com/[A-Za-z0-9_-]{22}/[a-z0-9-]+'''
+keywords = ["hc-ping.com"]
+
+[[rules]]
+id = "ntfy-topic-url"
+description = "ntfy topic URL with an unguessable topic - the topic name is the password"
+regex = '''ntfy\.sh/[A-Za-z0-9_-]{16,64}'''
+keywords = ["ntfy.sh"]
+
+[[rules]]
+id = "rclone-oauth-token"
+description = "OAuth token blob as stored in rclone.conf"
+regex = '''"(access|refresh)_token"\s*:\s*"[^"]{20,}"'''
+keywords = ["access_token", "refresh_token"]
+
+[[rules]]
+id = "google-oauth-client-secret"
+description = "Google OAuth client secret"
+regex = '''GOCSPX-[A-Za-z0-9_-]{20,}'''
+keywords = ["GOCSPX-"]

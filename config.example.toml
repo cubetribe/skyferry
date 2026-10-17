@@ -1,0 +1,56 @@
+# skyferry - Beispielkonfiguration (nur Platzhalter, KEINE echten Zugangsdaten eintragen,
+# wenn diese Datei im Repo liegt). Echte Datei: ~/.config/skyferry/config.toml (chmod 600).
+
+[source]
+remote = "gdrive"                 # rclone-Remote-Name (Typ drive)
+root_folder_id = ""               # leer = Meine Ablage (Root)
+local_root = ""                   # NUR fuer Tests: lokaler Ordner statt Drive
+export_formats = "docx,xlsx,pptx,svg"
+acknowledge_abuse = true
+skip_shortcuts = true
+done_prefix = "[MIGRIERT] "
+
+[buffer]
+mount = "/mnt/skyferry"             # muss ein Mountpoint sein (require_mount)
+require_mount = true              # nur fuer Tests abschalten
+marker_file = ".skyferry-buffer"  # muss im Mount-Root existieren
+staging_dir = "staging"           # relativ zu mount
+reserve_bytes = 50_000_000_000    # nie unter diese Freigrenze schreiben
+max_unit_bytes = 300_000_000_000  # groessere Ordner werden geteilt
+
+[rclone]
+binary = "rclone"
+config = ""                       # leer = rclone-Default
+transfers = 4
+checkers = 8
+tpslimit = 10
+bwlimit = ""                      # z.B. "08:00,20M 23:00,off"
+retries = 5
+low_level_retries = 20
+local_encoding = ""               # leer = rclone-Default
+stats_interval = "1m"
+extra_args = []
+
+[target]
+type = "folder"                   # folder (spaeter: wine | webpanel)
+path = "/pfad/zum/zielordner"     # FolderTarget: Zielordner (simuliert den Sync.com-Ordner)
+remote_subdir = "GDrive-Archiv"   # Unterordner im Ziel, darunter der Original-Drive-Pfad
+
+[notify]
+ntfy_url = ""                     # z.B. https://ntfy.sh/<geheimes-topic>; leer = aus
+ntfy_token = ""                   # optional
+healthchecks_url = ""             # z.B. https://hc-ping.com/<uuid>; leer = aus
+heartbeat_seconds = 300
+stall_hours = 6                   # kein Fortschritt so lange -> Alarm
+daily_summary_hour = 20           # lokale Zeit; -1 = aus
+min_repeat_minutes = 60           # gleiche Meldung fruehestens wieder nach X Min
+include_paths = false             # false: KEINE Pfade/Dateinamen an ntfy/healthchecks (Datenschutz)
+
+[state]
+dir = "~/.local/state/skyferry"  # state.db, logs/, reports/
+
+[run]
+max_attempts = 3                  # Versuche pro Unit, danach FAILED
+poll_seconds = 60                 # Wartezeit, wenn nichts voranschreitet
+defer_temporary_minutes = 15      # rclone Exit 5
+defer_limit_minutes = 360         # rclone Exit 8 (Transferlimit)

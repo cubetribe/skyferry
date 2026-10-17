@@ -1,0 +1,33 @@
+name: Bug report
+description: Something went wrong during a migration
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! **Please do not paste secrets** (rclone.conf, ntfy topics, healthchecks URLs) or private folder names.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: status
+    attributes:
+      label: Output of `python3 -m skyferry status`
+      render: text
+  - type: textarea
+    id: events
+    attributes:
+      label: Relevant events (`python3 -m skyferry events --tail 30`), redacted
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: skyferry commit, rclone version, OS
+      placeholder: "skyferry abc1234, rclone v1.75.2, Ubuntu 24.04"
+    validations:
+      required: true

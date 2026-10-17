@@ -1,0 +1,7 @@
+# Default owner
+*                 @cubetribe
+
+# Security guardrails: changes here always need the maintainer's review
+/.github/         @cubetribe
+/.gitleaks.toml   @cubetribe
+/scripts/         @cubetribe

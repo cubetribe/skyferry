@@ -1,0 +1,48 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  unittest:
+    name: unittest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install rclone (pinned, SHA256-verified)
+        env:
+          RCLONE_VERSION: "v1.75.2"
+          RCLONE_SHA256: "349ac8fba6ff65d6247043f1750cdcb518ec5d500ef91463a10d37c0ccdf3702"
+        run: |
+          set -euo pipefail
+          zip="rclone-${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSL -o "$RUNNER_TEMP/$zip" "https://downloads.rclone.org/${RCLONE_VERSION}/${zip}"
+          echo "${RCLONE_SHA256}  $RUNNER_TEMP/$zip" | sha256sum -c -
+          unzip -q -j -d "$RUNNER_TEMP/rclone" "$RUNNER_TEMP/$zip" "rclone-${RCLONE_VERSION}-linux-amd64/rclone"
+          echo "$RUNNER_TEMP/rclone" >> "$GITHUB_PATH"
+
+      - name: Versions
+        run: |
+          python3 --version
+          rclone version | head -1
+
+      - name: Unit and end-to-end tests (stdlib unittest, no network)
+        run: python3 -m unittest discover -s tests -v

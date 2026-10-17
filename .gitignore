@@ -1,0 +1,19 @@
+# Echte Konfigurationen und Geheimnisse
+config.toml
+*.local.toml
+rclone.conf
+.env
+*.token
+
+# Laufzeit-Zustand
+state/
+*.db
+*.db-wal
+*.db-shm
+*.lock
+_install-test/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

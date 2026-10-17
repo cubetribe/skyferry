@@ -1,0 +1,8 @@
+[Unit]
+Description=Alarm: Dienst %i abgestuerzt
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/skyferry
+Environment=PATH=%h/.local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 -m skyferry notify-alarm "Dienst %i abgestürzt"
