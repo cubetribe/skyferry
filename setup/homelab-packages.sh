@@ -8,7 +8,7 @@
 # sowie Hilfsprogramme für die Pufferplatte. Idempotent.
 set -euo pipefail
 
-if [ ! -t 0 ]; then
+if [ "$(id -u)" -ne 0 ] && [ ! -t 0 ]; then
   echo "Kein Terminal: sudo kann so nicht nach dem Passwort fragen." >&2
   echo "Aufruf: ssh -t <ssh-host> 'bash ~/skyferry-setup/homelab-packages.sh'" >&2
   exit 1

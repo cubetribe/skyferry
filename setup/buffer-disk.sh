@@ -6,6 +6,7 @@
 # Aufruf vom Mac aus (Seriennummer aus `lsblk -o NAME,SERIAL,TRAN,SIZE`):
 #   rsync -a setup/ <ssh-host>:~/skyferry-setup/
 #   ssh -t <ssh-host> sudo bash ~/skyferry-setup/buffer-disk.sh <SERIENNUMMER> [benutzer]
+# Ohne Rückfrage (z. B. in einem Skript): SKYFERRY_CONFIRM_WIPE=<SERIENNUMMER> setzen.
 #
 # Ergebnis:
 # - Partitionstabelle GPT mit einer ext4-Partition (Label skyferry-buffer)
@@ -59,8 +60,13 @@ while read -r part fstype; do
 done < <(lsblk -lnp -o NAME,FSTYPE "$DEV" | tail -n +2)
 rmdir "$TMP"
 echo
-read -r -p "Alle Daten auf $DEV ($SERIAL) löschen? Tippe LOESCHEN: " ANSWER
-[ "$ANSWER" = "LOESCHEN" ] || { echo "Abgebrochen, nichts verändert."; exit 1; }
+# Nicht-interaktive Bestätigung: SKYFERRY_CONFIRM_WIPE muss exakt die Seriennummer enthalten.
+if [ "${SKYFERRY_CONFIRM_WIPE:-}" = "$SERIAL" ]; then
+  echo "Löschen bestätigt über SKYFERRY_CONFIRM_WIPE=$SERIAL"
+else
+  read -r -p "Alle Daten auf $DEV ($SERIAL) löschen? Tippe LOESCHEN: " ANSWER
+  [ "$ANSWER" = "LOESCHEN" ] || { echo "Abgebrochen, nichts verändert."; exit 1; }
+fi
 
 echo "==> Signaturen löschen und neu partitionieren"
 for p in $(lsblk -lnp -o NAME "$DEV" | tail -n +2); do wipefs -a "$p"; done
