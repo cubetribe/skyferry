@@ -68,7 +68,8 @@ Replace `<server>` with your SSH host alias and `<SERIAL>` with the disk serial.
 
 ```bash
 # 1. Optional, only for the Sync.com spike: Wine and friends (needs sudo once)
-ssh -t <server> 'bash -s' < setup/homelab-packages.sh
+rsync -a setup/ <server>:~/skyferry-setup/
+ssh -t <server> 'bash ~/skyferry-setup/homelab-packages.sh'
 
 # 2. Connect Google Drive. The browser login happens on your laptop through an SSH tunnel.
 ./setup/gdrive-connect.sh <server>

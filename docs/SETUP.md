@@ -30,7 +30,8 @@ Throughout, `<server>` stands for the SSH host alias of your server, and `<SERIA
 The migration engine needs only Python 3.12 and rclone 1.75 or newer. Wine and the headless X tools are needed only for the Sync.com experiments in `spike/wine/`. The script also installs `sqlite3` and `smartmontools`, which are handy for inspection and disk health checks.
 
 ```bash
-ssh -t <server> 'bash -s' < setup/homelab-packages.sh
+rsync -a setup/ <server>:~/skyferry-setup/
+ssh -t <server> 'bash ~/skyferry-setup/homelab-packages.sh'
 ```
 
 The script asks for the sudo password once. It is idempotent.

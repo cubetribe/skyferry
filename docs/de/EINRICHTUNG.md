@@ -30,7 +30,8 @@ Einige Schritte brauchen ein Passwort, eine Anmeldung oder deine Zustimmung und 
 Die Migrations-Engine braucht nur Python 3.12 und rclone ab Version 1.75. Wine und die headless X-Werkzeuge werden nur für die Sync.com-Versuche in `spike/wine/` gebraucht. Das Skript installiert außerdem `sqlite3` und `smartmontools`, nützlich zur Kontrolle und für den Zustand der Platte.
 
 ```bash
-ssh -t <server> 'bash -s' < setup/homelab-packages.sh
+rsync -a setup/ <server>:~/skyferry-setup/
+ssh -t <server> 'bash ~/skyferry-setup/homelab-packages.sh'
 ```
 
 Das Skript fragt einmal nach dem sudo-Passwort. Es ist idempotent, kann also gefahrlos erneut laufen.

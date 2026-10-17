@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
-# Einmalig auf dem Server ausführen (Ubuntu/Debian, fragt nach dem sudo-Passwort):
-#   ssh -t <ssh-host> 'bash -s' < setup/homelab-packages.sh
+# Einmalig auf dem Server ausführen (Ubuntu/Debian, fragt nach dem sudo-Passwort).
+# Das Skript muss auf dem Server liegen: sudo braucht ein Terminal für die Passwortabfrage,
+# und ein per stdin hineingeleitetes Skript (`bash -s < …`) hat keins.
+#   rsync -a setup/ <ssh-host>:~/skyferry-setup/
+#   ssh -t <ssh-host> 'bash ~/skyferry-setup/homelab-packages.sh'
 # Installiert Wine und die headless-X-Werkzeuge für den Sync.com-Client unter Wine
 # sowie Hilfsprogramme für die Pufferplatte. Idempotent.
 set -euo pipefail
+
+if [ ! -t 0 ]; then
+  echo "Kein Terminal: sudo kann so nicht nach dem Passwort fragen." >&2
+  echo "Aufruf: ssh -t <ssh-host> 'bash ~/skyferry-setup/homelab-packages.sh'" >&2
+  exit 1
+fi
 
 echo "==> i386-Architektur für wine32 aktivieren"
 if ! dpkg --print-foreign-architectures | grep -qx i386; then
